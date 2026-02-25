@@ -6,49 +6,358 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZenCore · Minecraft events</title>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; }
-        body { background: #0c1422; color:white; display:flex; flex-direction:column; align-items:center; }
-        .nav { width:100%; padding:1rem 2rem; background:#0e1628; border-bottom:1px solid #213457; display:flex; }
-        .back { color:#9ab9ff; text-decoration:none; font-size:1.2rem; }
-        .container { max-width:700px; margin:2rem; background:#131f33; border-radius:2.5rem; padding:2.5rem; border:1px solid #2a4070; width:100%; }
-        h1 { font-size:2.5rem; background:linear-gradient(145deg,#b3ffb3,#6cb46c); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .event-card { background:#1c2b42; border-radius:2rem; padding:1.5rem; margin:1.5rem 0; }
-        .apply-btn { background:#2e7d32; color:white; border:none; padding:0.9rem 2.5rem; border-radius:3rem; font-weight:600; font-size:1.2rem; cursor:pointer; margin:1rem 0; box-shadow:0 5px 0 #1b4f1b; transition:0.1s; }
-        .apply-form { display:none; background:#111f30; border-radius:2rem; padding:2rem; margin-top:2rem; }
-        .apply-form input { display:block; width:100%; padding:0.8rem 1.2rem; margin-bottom:1rem; background:#07111f; border:1px solid #2f4870; border-radius:3rem; color:white; }
-        .submit-app { background:#3b82f6; box-shadow:0 4px 0 #1e4b9c; border:none; padding:0.8rem; width:100%; border-radius:3rem; font-weight:bold; color:white; cursor:pointer; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: #0b111f;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(10, 17, 30, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            border-bottom: 1px solid #253a68;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .back-link {
+            color: #8aaeff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .back-link:hover {
+            color: #b8d0ff;
+            transform: translateX(-3px);
+        }
+
+        .logo-small {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #a5c9ff, #7aa5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-left: auto;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 900px;
+            margin: 2.5rem auto;
+            padding: 0 2rem;
+            width: 100%;
+        }
+
+        /* Header */
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .category-icon {
+            font-size: 3.5rem;
+            background: #1f2f4a;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2rem;
+            border: 2px solid #3c8a4e;
+        }
+
+        .category-title h1 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            background: linear-gradient(145deg, #b3ffb3, #6cb46c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .category-title p {
+            color: #9ab0d9;
+            font-size: 1.1rem;
+        }
+
+        /* Event card */
+        .event-card {
+            background: #14243c;
+            border-radius: 2.5rem;
+            padding: 2.5rem;
+            border: 1px solid #2f4870;
+            box-shadow: 0 20px 30px -10px #00000080;
+            margin-bottom: 2rem;
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .event-header h2 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #d0e2ff;
+        }
+
+        .prize-badge {
+            background: #2d4f2d;
+            padding: 0.7rem 1.8rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            border: 1px solid #6fb56f;
+            color: #d5ffd5;
+        }
+
+        .event-desc {
+            color: #b8cff2;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .apply-btn {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #1b4f1b;
+            transition: 0.1s ease;
+            width: fit-content;
+        }
+
+        .apply-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #1b4f1b;
+        }
+
+        /* Application form */
+        .apply-form {
+            background: #0e1d30;
+            border-radius: 2.5rem;
+            padding: 2.5rem;
+            border: 1px solid #3b5f8a;
+            margin-top: 2rem;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .apply-form.visible {
+            display: block;
+        }
+
+        .apply-form h3 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: #d4e4ff;
+            font-weight: 500;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: #adc4f0;
+            margin-bottom: 0.3rem;
+            margin-left: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: #112236;
+            border: 1px solid #2d4870;
+            border-radius: 3rem;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        .submit-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #1e4b9c;
+            transition: 0.1s;
+            width: 100%;
+        }
+
+        .submit-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #1e4b9c;
+        }
+
+        .success-note {
+            margin-top: 1.5rem;
+            color: #8fc5ff;
+            text-align: center;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
-    <div class="nav"><a href="homepage.html" class="back">← Home</a></div>
+    <div class="navbar">
+        <a href="homepage.html" class="back-link">← Back to categories</a>
+        <div class="logo-small">⛏️ ZenCore</div>
+    </div>
+
     <div class="container">
-        <h1>⛏️ Minecraft events</h1>
-        <div class="event-card">
-            <h2>SkyWars night</h2>
-            <p>prize: 50$ · 16 players</p>
-            <button class="apply-btn" id="showMinecraftForm">Apply for event</button>
+        <!-- Header -->
+        <div class="category-header">
+            <div class="category-icon">⛏️</div>
+            <div class="category-title">
+                <h1>Minecraft</h1>
+                <p>block battles · creative · survival events</p>
+            </div>
         </div>
 
-        <div id="minecraftApplyForm" class="apply-form">
-            <h3 style="margin-bottom:1rem">enter your info</h3>
-            <input type="text" placeholder="your-minecraft-username" id="mcUser">
-            <input type="text" placeholder="your-real-name" id="mcReal">
-            <input type="number" placeholder="your-age" id="mcAge">
-            <input type="text" placeholder="your-country" id="mcCountry">
-            <input type="text" placeholder="your-device (pc/mobile)" id="mcDevice">
-            <button class="submit-app" id="mcSubmit">submit application</button>
-            <p style="margin-top:1rem; color:#8bb4ff; font-size:0.9rem;">✉️ dummy – info saved (admin panel shows)</p>
+        <!-- Event card -->
+        <div class="event-card">
+            <div class="event-header">
+                <h2>SkyWars Championship</h2>
+                <span class="prize-badge">🏆 $50 prize</span>
+            </div>
+            <div class="event-desc">
+                <p>🗓️ May 15, 2026 · 16 players · 1.20 version</p>
+                <p style="margin-top: 0.8rem;">Fight on floating islands. Last player standing wins.</p>
+            </div>
+            <button class="apply-btn" id="showFormBtn">Apply for event</button>
+
+            <!-- Application form (hidden initially) -->
+            <div id="applyForm" class="apply-form">
+                <h3>📋 Minecraft registration</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>minecraft username</label>
+                        <input type="text" id="mcUser" placeholder="Steve_123" required>
+                    </div>
+                    <div class="form-group">
+                        <label>real name</label>
+                        <input type="text" id="mcReal" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label>age</label>
+                        <input type="number" id="mcAge" placeholder="16" required>
+                    </div>
+                    <div class="form-group">
+                        <label>country</label>
+                        <input type="text" id="mcCountry" placeholder="USA" required>
+                    </div>
+                    <div class="form-group">
+                        <label>device (pc/mobile)</label>
+                        <input type="text" id="mcDevice" placeholder="PC" required>
+                    </div>
+                </div>
+                <button class="submit-btn" id="submitApplication">Submit application</button>
+                <div class="success-note" id="successMsg" style="display: none;">✓ Application received! (demo)</div>
+            </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('showMinecraftForm').addEventListener('click', ()=>{
-            document.getElementById('minecraftApplyForm').style.display = 'block';
-        });
-        // dummy submit (could store to localStorage but admin panel is separate)
-        document.getElementById('mcSubmit').addEventListener('click', ()=>{
-            alert('application recorded (demo)');
-        });
+        (function() {
+            const showFormBtn = document.getElementById('showFormBtn');
+            const applyForm = document.getElementById('applyForm');
+            const submitBtn = document.getElementById('submitApplication');
+            const successMsg = document.getElementById('successMsg');
+
+            // Show form when "Apply" clicked
+            showFormBtn.addEventListener('click', function() {
+                applyForm.classList.add('visible');
+                // Scroll to form smoothly
+                applyForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+
+            // Handle form submission (demo)
+            submitBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Simple validation
+                const user = document.getElementById('mcUser').value.trim();
+                const name = document.getElementById('mcReal').value.trim();
+                const age = document.getElementById('mcAge').value.trim();
+                const country = document.getElementById('mcCountry').value.trim();
+                const device = document.getElementById('mcDevice').value.trim();
+
+                if (!user || !name || !age || !country || !device) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+
+                if (parseInt(age) < 5 || parseInt(age) > 100) {
+                    alert('Please enter a valid age');
+                    return;
+                }
+
+                // Show success message
+                successMsg.style.display = 'block';
+                
+                // Optional: clear form? we keep it for demo
+                // You could also reset form here
+
+                // Auto hide success after 3 sec
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 3000);
+            });
+        })();
     </script>
 </body>
 </html>
