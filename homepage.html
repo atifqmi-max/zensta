@@ -1,0 +1,57 @@
+<!-- homepage.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenCore · categories</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
+        body { background: #0d111f; color: white; }
+        .navbar { background: #0b111ecc; backdrop-filter: blur(16px); padding: 1.2rem 2rem; display: flex; align-items: center; border-bottom: 1px solid #253968; }
+        .logo { font-size: 1.8rem; font-weight: 700; background: linear-gradient(130deg, #90caf9, #bb86fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .admin-badge { margin-left: auto; background: #1e2a44; padding: 0.5rem 1.2rem; border-radius: 3rem; font-size: 0.9rem; border: 1px solid #2d4b7a; }
+        .admin-badge a { color: #aac8ff; text-decoration: none; font-weight: 500; }
+        .hero { padding: 3rem 2rem 1rem; text-align: center; }
+        .hero h2 { font-size: 2.5rem; font-weight: 600; background: linear-gradient(145deg, #fff, #b7d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .categories { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; }
+        .card { background: #131d30; border-radius: 2.5rem; padding: 2.5rem 2rem; width: 280px; text-align: center; border: 1px solid #2a3d60; transition: 0.25s ease; cursor: pointer; box-shadow: 0 15px 25px -10px #00000080; }
+        .card:hover { transform: scale(1.03); border-color: #4f7ec9; background: #182337; }
+        .card .emoji-bg { font-size: 4rem; margin-bottom: 1rem; filter: drop-shadow(0 8px 6px #00000060); }
+        .card h3 { font-size: 2rem; font-weight: 500; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
+        .minecraft { border-bottom: 4px solid #3c8a4e; }
+        .pubg { border-bottom: 4px solid #d97c2b; }
+        .mix { border-bottom: 4px solid #9f7aea; }
+        .footer-note { text-align: center; padding: 2rem; color: #5e739b; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <span class="logo">⚡ZenCore</span>
+        <div class="admin-badge"><a href="admin-login.html">admin ▸</a></div>
+    </div>
+    <div class="hero">
+        <h2>choose your battleground</h2>
+        <p style="color:#97afd4; margin-top: 0.5rem;">select a category to explore events</p>
+    </div>
+
+    <div class="categories">
+        <div class="card minecraft" onclick="window.location.href='minecraft.html'">
+            <div class="emoji-bg">⛏️</div>
+            <h3>Minecraft</h3>
+            <p style="color:#b2d9b2;">build, fight, compete</p>
+        </div>
+        <div class="card pubg" onclick="window.location.href='pubg.html'">
+            <div class="emoji-bg">🪖</div>
+            <h3>PUBG Mobile</h3>
+            <p style="color:#f9c49a;">battle royale</p>
+        </div>
+        <div class="card mix" onclick="window.location.href='mix.html'">
+            <div class="emoji-bg">🎮</div>
+            <h3>Mix Events</h3>
+            <p style="color:#c7b0ff;">valorant, cod, etc.</p>
+        </div>
+    </div>
+    <div class="footer-note">— join a category and apply —</div>
+</body>
+</html>
