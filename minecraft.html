@@ -1,0 +1,54 @@
+<!-- minecraft.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenCore · Minecraft events</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; }
+        body { background: #0c1422; color:white; display:flex; flex-direction:column; align-items:center; }
+        .nav { width:100%; padding:1rem 2rem; background:#0e1628; border-bottom:1px solid #213457; display:flex; }
+        .back { color:#9ab9ff; text-decoration:none; font-size:1.2rem; }
+        .container { max-width:700px; margin:2rem; background:#131f33; border-radius:2.5rem; padding:2.5rem; border:1px solid #2a4070; width:100%; }
+        h1 { font-size:2.5rem; background:linear-gradient(145deg,#b3ffb3,#6cb46c); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .event-card { background:#1c2b42; border-radius:2rem; padding:1.5rem; margin:1.5rem 0; }
+        .apply-btn { background:#2e7d32; color:white; border:none; padding:0.9rem 2.5rem; border-radius:3rem; font-weight:600; font-size:1.2rem; cursor:pointer; margin:1rem 0; box-shadow:0 5px 0 #1b4f1b; transition:0.1s; }
+        .apply-form { display:none; background:#111f30; border-radius:2rem; padding:2rem; margin-top:2rem; }
+        .apply-form input { display:block; width:100%; padding:0.8rem 1.2rem; margin-bottom:1rem; background:#07111f; border:1px solid #2f4870; border-radius:3rem; color:white; }
+        .submit-app { background:#3b82f6; box-shadow:0 4px 0 #1e4b9c; border:none; padding:0.8rem; width:100%; border-radius:3rem; font-weight:bold; color:white; cursor:pointer; }
+    </style>
+</head>
+<body>
+    <div class="nav"><a href="homepage.html" class="back">← Home</a></div>
+    <div class="container">
+        <h1>⛏️ Minecraft events</h1>
+        <div class="event-card">
+            <h2>SkyWars night</h2>
+            <p>prize: 50$ · 16 players</p>
+            <button class="apply-btn" id="showMinecraftForm">Apply for event</button>
+        </div>
+
+        <div id="minecraftApplyForm" class="apply-form">
+            <h3 style="margin-bottom:1rem">enter your info</h3>
+            <input type="text" placeholder="your-minecraft-username" id="mcUser">
+            <input type="text" placeholder="your-real-name" id="mcReal">
+            <input type="number" placeholder="your-age" id="mcAge">
+            <input type="text" placeholder="your-country" id="mcCountry">
+            <input type="text" placeholder="your-device (pc/mobile)" id="mcDevice">
+            <button class="submit-app" id="mcSubmit">submit application</button>
+            <p style="margin-top:1rem; color:#8bb4ff; font-size:0.9rem;">✉️ dummy – info saved (admin panel shows)</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('showMinecraftForm').addEventListener('click', ()=>{
+            document.getElementById('minecraftApplyForm').style.display = 'block';
+        });
+        // dummy submit (could store to localStorage but admin panel is separate)
+        document.getElementById('mcSubmit').addEventListener('click', ()=>{
+            alert('application recorded (demo)');
+        });
+    </script>
+</body>
+</html>
