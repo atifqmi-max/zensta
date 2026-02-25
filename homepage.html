@@ -1,57 +1,288 @@
-<!-- homepage.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenCore · categories</title>
+    <title>ZenCore · event categories</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
-        body { background: #0d111f; color: white; }
-        .navbar { background: #0b111ecc; backdrop-filter: blur(16px); padding: 1.2rem 2rem; display: flex; align-items: center; border-bottom: 1px solid #253968; }
-        .logo { font-size: 1.8rem; font-weight: 700; background: linear-gradient(130deg, #90caf9, #bb86fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .admin-badge { margin-left: auto; background: #1e2a44; padding: 0.5rem 1.2rem; border-radius: 3rem; font-size: 0.9rem; border: 1px solid #2d4b7a; }
-        .admin-badge a { color: #aac8ff; text-decoration: none; font-weight: 500; }
-        .hero { padding: 3rem 2rem 1rem; text-align: center; }
-        .hero h2 { font-size: 2.5rem; font-weight: 600; background: linear-gradient(145deg, #fff, #b7d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .categories { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; }
-        .card { background: #131d30; border-radius: 2.5rem; padding: 2.5rem 2rem; width: 280px; text-align: center; border: 1px solid #2a3d60; transition: 0.25s ease; cursor: pointer; box-shadow: 0 15px 25px -10px #00000080; }
-        .card:hover { transform: scale(1.03); border-color: #4f7ec9; background: #182337; }
-        .card .emoji-bg { font-size: 4rem; margin-bottom: 1rem; filter: drop-shadow(0 8px 6px #00000060); }
-        .card h3 { font-size: 2rem; font-weight: 500; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
-        .minecraft { border-bottom: 4px solid #3c8a4e; }
-        .pubg { border-bottom: 4px solid #d97c2b; }
-        .mix { border-bottom: 4px solid #9f7aea; }
-        .footer-note { text-align: center; padding: 2rem; color: #5e739b; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: #0a0f1e;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation bar */
+        .navbar {
+            background: rgba(10, 17, 30, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 1.2rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #253a68;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a5c9ff, #7aa5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .admin-badge {
+            background: #1b2740;
+            padding: 0.6rem 1.4rem;
+            border-radius: 3rem;
+            border: 1px solid #3b5b99;
+            transition: 0.2s;
+        }
+
+        .admin-badge a {
+            color: #bbd5ff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .admin-badge:hover {
+            background: #253a60;
+            border-color: #5a7fc9;
+        }
+
+        /* Hero section */
+        .hero {
+            padding: 3rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            background: linear-gradient(145deg, #ffffff, #b0cdff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            color: #8ea4cc;
+            font-size: 1.2rem;
+        }
+
+        /* Categories grid */
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2.5rem;
+            justify-content: center;
+            align-items: center;
+            max-width: 1300px;
+            margin: 3rem auto;
+            padding: 1.5rem 2rem;
+            flex: 1;
+        }
+
+        .category-card {
+            background: #142237;
+            border-radius: 3rem;
+            padding: 3rem 2rem;
+            width: 300px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid #2d4370;
+            transition: all 0.25s ease;
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            border-color: #4f7ec9;
+            background: #192d47;
+            box-shadow: 0 25px 35px -8px #020514;
+        }
+
+        .category-card:active {
+            transform: translateY(-2px);
+        }
+
+        .emoji {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 8px 8px #00000060);
+        }
+
+        .category-card h3 {
+            font-size: 2.3rem;
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+            letter-spacing: -0.5px;
+        }
+
+        .category-desc {
+            color: #a6bde6;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Category specific bottom accents */
+        .minecraft {
+            border-bottom: 6px solid #3c8a4e;
+        }
+        .pubg {
+            border-bottom: 6px solid #d97c2b;
+        }
+        .mix {
+            border-bottom: 6px solid #9f7aea;
+        }
+
+        .minecraft:hover {
+            border-bottom-color: #5fba74;
+        }
+        .pubg:hover {
+            border-bottom-color: #ffa64f;
+        }
+        .mix:hover {
+            border-bottom-color: #c4a8ff;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #4e658d;
+            border-top: 1px solid #1b2740;
+            margin-top: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .navbar {
+                padding: 1rem 1.5rem;
+            }
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            .category-card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Navigation -->
     <div class="navbar">
-        <span class="logo">⚡ZenCore</span>
-        <div class="admin-badge"><a href="admin-login.html">admin ▸</a></div>
-    </div>
-    <div class="hero">
-        <h2>choose your battleground</h2>
-        <p style="color:#97afd4; margin-top: 0.5rem;">select a category to explore events</p>
+        <span class="logo">⚡ ZenCore Events</span>
+        <div class="admin-badge">
+            <a href="admin-login.html">
+                <span>🔒</span> admin panel
+            </a>
+        </div>
     </div>
 
+    <!-- Hero section -->
+    <div class="hero">
+        <h2>choose your battleground</h2>
+        <p>select a category to explore events & apply</p>
+    </div>
+
+    <!-- Category cards (clickable) -->
     <div class="categories">
-        <div class="card minecraft" onclick="window.location.href='minecraft.html'">
-            <div class="emoji-bg">⛏️</div>
+        <!-- Minecraft card -->
+        <div class="category-card minecraft" id="minecraft-card">
+            <div class="emoji">⛏️</div>
             <h3>Minecraft</h3>
-            <p style="color:#b2d9b2;">build, fight, compete</p>
+            <div class="category-desc">build battles · skywars · survival</div>
+            <div style="color: #8bc34a; font-size: 0.9rem; margin-top: 0.8rem;">→ click to enter</div>
         </div>
-        <div class="card pubg" onclick="window.location.href='pubg.html'">
-            <div class="emoji-bg">🪖</div>
+
+        <!-- PUBG Mobile card -->
+        <div class="category-card pubg" id="pubg-card">
+            <div class="emoji">🪖</div>
             <h3>PUBG Mobile</h3>
-            <p style="color:#f9c49a;">battle royale</p>
+            <div class="category-desc">battle royale · team deathmatch</div>
+            <div style="color: #f9a95a; font-size: 0.9rem; margin-top: 0.8rem;">→ click to enter</div>
         </div>
-        <div class="card mix" onclick="window.location.href='mix.html'">
-            <div class="emoji-bg">🎮</div>
+
+        <!-- Mix Events card -->
+        <div class="category-card mix" id="mix-card">
+            <div class="emoji">🎮</div>
             <h3>Mix Events</h3>
-            <p style="color:#c7b0ff;">valorant, cod, etc.</p>
+            <div class="category-desc">valorant · cod · fortnight</div>
+            <div style="color: #b794f6; font-size: 0.9rem; margin-top: 0.8rem;">→ click to enter</div>
         </div>
     </div>
-    <div class="footer-note">— join a category and apply —</div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <span>© 2026 ZenCore · all events are virtual</span>
+    </div>
+
+    <!-- Simple JavaScript for navigation -->
+    <script>
+        (function() {
+            // Get card elements
+            const minecraftCard = document.getElementById('minecraft-card');
+            const pubgCard = document.getElementById('pubg-card');
+            const mixCard = document.getElementById('mix-card');
+
+            // Add click event listeners
+            if (minecraftCard) {
+                minecraftCard.addEventListener('click', function() {
+                    window.location.href = 'minecraft.html';
+                });
+            }
+
+            if (pubgCard) {
+                pubgCard.addEventListener('click', function() {
+                    window.location.href = 'pubg.html';
+                });
+            }
+
+            if (mixCard) {
+                mixCard.addEventListener('click', function() {
+                    window.location.href = 'mix.html';
+                });
+            }
+
+            // Optional: add touch/pointer cursor style for better UX
+            const cards = document.querySelectorAll('.category-card');
+            cards.forEach(card => {
+                card.style.cursor = 'pointer';
+            });
+
+            // Keyboard accessibility (optional: Enter key on focused card)
+            cards.forEach(card => {
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+                // Make cards focusable for keyboard users
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+            });
+        })();
+    </script>
 </body>
 </html>
