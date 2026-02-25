@@ -1,13 +1,107 @@
 <!-- mix.html -->
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><title>ZenCore · Mix events</title><style> /* fast style */ </style></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenCore · Mix events</title>
+    <style>
+        /* Same structure, mix color scheme */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: #0b111f; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+        .navbar { background: rgba(10, 17, 30, 0.95); backdrop-filter: blur(10px); padding: 1.2rem 2.5rem; display: flex; align-items: center; gap: 2rem; border-bottom: 1px solid #253a68; position: sticky; top: 0; }
+        .back-link { color: #8aaeff; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; font-weight: 500; }
+        .back-link:hover { color: #b8d0ff; transform: translateX(-3px); }
+        .logo-small { font-size: 1.5rem; font-weight: 600; background: linear-gradient(135deg, #d4b8ff, #9f7aea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-left: auto; }
+        .container { max-width: 900px; margin: 2.5rem auto; padding: 0 2rem; width: 100%; }
+        .category-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
+        .category-icon { font-size: 3.5rem; background: #1f2f4a; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 2rem; border: 2px solid #9f7aea; }
+        .category-title h1 { font-size: 2.8rem; font-weight: 600; background: linear-gradient(145deg, #e3d0ff, #9f7aea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .category-title p { color: #9ab0d9; font-size: 1.1rem; }
+        .event-card { background: #14243c; border-radius: 2.5rem; padding: 2.5rem; border: 1px solid #2f4870; box-shadow: 0 20px 30px -10px #00000080; margin-bottom: 2rem; }
+        .event-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+        .event-header h2 { font-size: 2.2rem; font-weight: 600; color: #d0e2ff; }
+        .prize-badge { background: #624c8a; padding: 0.7rem 1.8rem; border-radius: 3rem; font-weight: 600; font-size: 1.2rem; border: 1px solid #bba5ff; color: #f0e5ff; }
+        .event-desc { color: #b8cff2; margin-bottom: 2rem; line-height: 1.6; font-size: 1.1rem; }
+        .apply-btn { background: #7e5aaa; color: white; border: none; padding: 1rem 2.5rem; border-radius: 3rem; font-weight: 600; font-size: 1.2rem; cursor: pointer; box-shadow: 0 6px 0 #4c3675; transition: 0.1s; width: fit-content; }
+        .apply-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #4c3675; }
+        .apply-form { background: #0e1d30; border-radius: 2.5rem; padding: 2.5rem; border: 1px solid #3b5f8a; margin-top: 2rem; display: none; animation: slideDown 0.3s ease; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+        .apply-form.visible { display: block; }
+        .apply-form h3 { font-size: 1.8rem; margin-bottom: 2rem; color: #d4e4ff; font-weight: 500; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 0.5rem; }
+        .form-group label { display: block; font-size: 0.9rem; color: #adc4f0; margin-bottom: 0.3rem; margin-left: 0.5rem; }
+        .form-group input { width: 100%; padding: 1rem 1.5rem; background: #112236; border: 1px solid #2d4870; border-radius: 3rem; color: white; font-size: 1rem; outline: none; }
+        .form-group input:focus { border-color: #9f7aea; box-shadow: 0 0 0 3px rgba(159,122,234,0.2); }
+        .submit-btn { background: #9f7aea; color: white; border: none; padding: 1rem 3rem; border-radius: 3rem; font-weight: 600; font-size: 1.2rem; cursor: pointer; box-shadow: 0 5px 0 #6246a0; transition: 0.1s; width: 100%; }
+        .submit-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #6246a0; }
+        .success-note { margin-top: 1.5rem; color: #c7b0ff; text-align: center; font-style: italic; }
+    </style>
+</head>
 <body>
-<div class="nav"><a href="homepage.html" class="back">← Home</a></div>
-<div class="container"><h1>🎮 Mix Events</h1>
-<div style="background:#1c2b42; border-radius:2rem; padding:1.5rem;"><h2>Valorant 5v5</h2><p>prize: 75$</p><button class="apply-btn" id="showMixForm">Apply</button></div>
-<div id="mixApplyForm" class="apply-form"><h3>info</h3><input placeholder="your-real-name"><input placeholder="your-age"><input placeholder="your-country"><input placeholder="your-device"><button class="submit-app">submit</button></div>
-</div>
-<script>document.getElementById('showMixForm').onclick=()=>document.getElementById('mixApplyForm').style.display='block';</script>
+    <div class="navbar">
+        <a href="homepage.html" class="back-link">← Back to categories</a>
+        <div class="logo-small">🎮 ZenCore</div>
+    </div>
+
+    <div class="container">
+        <div class="category-header">
+            <div class="category-icon">🎮</div>
+            <div class="category-title">
+                <h1>Mix Events</h1>
+                <p>valorant · COD · fortnight & more</p>
+            </div>
+        </div>
+
+        <div class="event-card">
+            <div class="event-header">
+                <h2>Valorant 5v5 Open</h2>
+                <span class="prize-badge">🏆 $75 prize</span>
+            </div>
+            <div class="event-desc">
+                <p>🗓️ May 25, 2026 · team entry · PC only</p>
+                <p style="margin-top: 0.8rem;">Competitive bracket. Register as team or solo.</p>
+            </div>
+            <button class="apply-btn" id="showFormBtn">Apply for event</button>
+
+            <div id="applyForm" class="apply-form">
+                <h3>📋 Mix event registration</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>real name</label><input type="text" id="mixReal" required></div>
+                    <div class="form-group"><label>age</label><input type="number" id="mixAge" required></div>
+                    <div class="form-group"><label>country</label><input type="text" id="mixCountry" required></div>
+                    <div class="form-group"><label>device</label><input type="text" id="mixDevice" required></div>
+                </div>
+                <button class="submit-btn" id="submitApplication">Submit application</button>
+                <div class="success-note" id="successMsg" style="display: none;">✓ Application received! (demo)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            document.getElementById('showFormBtn').addEventListener('click', function() {
+                const form = document.getElementById('applyForm');
+                form.classList.add('visible');
+                form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+
+            document.getElementById('submitApplication').addEventListener('click', function(e) {
+                e.preventDefault();
+                const fields = ['mixReal', 'mixAge', 'mixCountry', 'mixDevice'];
+                for (let id of fields) {
+                    if (!document.getElementById(id).value.trim()) {
+                        alert('Please fill in all fields');
+                        return;
+                    }
+                }
+                document.getElementById('successMsg').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('successMsg').style.display = 'none';
+                }, 3000);
+            });
+        })();
+    </script>
 </body>
 </html>
