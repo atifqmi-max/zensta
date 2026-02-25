@@ -1,83 +1,764 @@
-<!-- admin.html (power panel) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenCore · admin cockpit</title>
+    <title>ZenCore · admin pro</title>
+    <!-- Font & Icons (Font Awesome for pro feel) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
-        body { background:#0a1020; color:#eef4ff; }
-        .admin-header { background:#0f1a2f; padding:1.5rem 2.5rem; border-bottom:2px solid #2c4d8c; display:flex; align-items:center; justify-content:space-between; }
-        h1 { font-size:2rem; font-weight:500; background:linear-gradient(145deg,#d4e4ff,#6ea4ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:2rem; padding:2.5rem; }
-        .card { background:#142237; border-radius:2rem; padding:1.8rem; border:1px solid #2a4170; box-shadow:0 10px 18px #00000050; }
-        .card h2 { font-weight:400; margin-bottom:1.2rem; border-left:6px solid #3b82f6; padding-left:1rem; }
-        button, .btn-like { background:#253b60; border:none; color:white; padding:0.7rem 1.4rem; border-radius:2.5rem; font-weight:500; margin:0.5rem 0.3rem; cursor:pointer; transition:0.1s; border:1px solid #3e6191; }
-        input, textarea, select { background:#0e1b2e; border:1px solid #2b4270; border-radius:3rem; padding:0.7rem 1.2rem; color:white; width:100%; margin-bottom:0.8rem; }
-        .flex { display:flex; gap:1rem; flex-wrap:wrap; }
-        .user-row { background:#1e3150; border-radius:2rem; padding:0.5rem 1.2rem; margin:0.3rem 0; display:flex; justify-content:space-between; }
-        .del { color:#ff9494; cursor:pointer; }
-        .section { margin-top:1.2rem; border-top:1px dashed #3e5680; padding-top:1rem; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #0a0f1e;
+            color: #eef4ff;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .admin-sidebar {
+            width: 280px;
+            background: rgba(12, 20, 35, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid #253a68;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 1.2rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            box-shadow: 10px 0 30px -10px #00000080;
+            z-index: 20;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 2.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .logo-icon {
+            font-size: 2.2rem;
+            background: linear-gradient(145deg, #7aa5ff, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #b0cdff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .admin-badge {
+            background: #1f3a6b;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            color: #b8d4ff;
+            display: inline-block;
+            margin-bottom: 2rem;
+            border: 1px solid #3f68b0;
+            text-align: center;
+        }
+
+        .nav-menu {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 1rem 1.2rem;
+            border-radius: 1.2rem;
+            color: #9bb3df;
+            transition: all 0.2s;
+            cursor: pointer;
+            font-weight: 500;
+            border: 1px solid transparent;
+        }
+
+        .nav-item i {
+            width: 24px;
+            font-size: 1.3rem;
+        }
+
+        .nav-item:hover {
+            background: #1f2f50;
+            color: white;
+            border-color: #3b5f9e;
+        }
+
+        .nav-item.active {
+            background: #1e3b6f;
+            color: white;
+            border-left: 5px solid #3b82f6;
+            box-shadow: 0 8px 12px -6px #0a1428;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid #253a68;
+            padding-top: 1.5rem;
+            margin-top: auto;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #142848;
+            padding: 1rem;
+            border-radius: 1.8rem;
+        }
+
+        .admin-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(145deg, #3b82f6, #7aa5ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .admin-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .admin-info p {
+            font-size: 0.75rem;
+            color: #a5bdff;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            overflow-y: auto;
+            height: 100vh;
+            background: #0d1324;
+            background-image: radial-gradient(circle at 10% 20%, rgba(30, 60, 130, 0.15) 0%, transparent 40%);
+        }
+
+        /* Header */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .page-title h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            background: linear-gradient(145deg, #fff, #b8d0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .page-title p {
+            color: #7f98c7;
+            margin-top: 0.3rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            background: #1f2f50;
+            border: 1px solid #2f4b82;
+            padding: 0.8rem 1.5rem;
+            border-radius: 2.5rem;
+            color: white;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .action-btn:hover {
+            background: #2a3f6b;
+            border-color: #4f7ec9;
+        }
+
+        /* Stat cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background: #14243c;
+            border-radius: 2rem;
+            padding: 1.8rem 1.5rem;
+            border: 1px solid #2f4870;
+            box-shadow: 0 10px 20px -8px #00000060;
+            transition: 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: #4f7ec9;
+        }
+
+        .stat-title {
+            color: #9bb1da;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.8rem;
+        }
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: white;
+        }
+        .stat-desc {
+            color: #6d8ac0;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        /* card grid for tools */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .tool-card {
+            background: #14243c;
+            border-radius: 2.5rem;
+            padding: 2rem;
+            border: 1px solid #2d4870;
+            box-shadow: 0 20px 30px -12px #000000b3;
+            backdrop-filter: blur(4px);
+            transition: 0.15s;
+        }
+
+        .tool-card:hover {
+            border-color: #4f7ec9;
+            background: #172b48;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.8rem;
+        }
+        .card-header i {
+            font-size: 2rem;
+            color: #7aa5ff;
+            background: #1f3760;
+            padding: 0.8rem;
+            border-radius: 1.5rem;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #e2ecff;
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #aec4f0;
+            margin-bottom: 0.3rem;
+            margin-left: 0.6rem;
+        }
+        .input-group input, .input-group textarea, .input-group select {
+            width: 100%;
+            padding: 0.9rem 1.4rem;
+            background: #0e1d33;
+            border: 1px solid #2b4a7a;
+            border-radius: 2rem;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+        }
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .btn-primary {
+            background: #1f3d75;
+            border: none;
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #10223d;
+            transition: 0.1s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 0.8rem;
+        }
+        .btn-primary:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #10223d;
+        }
+        .btn-primary i {
+            font-size: 1.1rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #3b5f8a;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 3rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+        .btn-outline:hover {
+            background: #1e3355;
+            border-color: #6a93d4;
+        }
+
+        .user-list {
+            max-height: 240px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .user-item {
+            background: #1d304e;
+            border-radius: 2rem;
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-avatar-small {
+            width: 32px;
+            height: 32px;
+            background: #3f6090;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .user-actions i {
+            color: #ff9f9f;
+            margin: 0 5px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: 0.1s;
+        }
+        .user-actions i:hover {
+            opacity: 1;
+            color: #ff5e5e;
+        }
+        .edit-icon {
+            color: #b8d0ff !important;
+        }
+        .edit-icon:hover {
+            color: #ffffff !important;
+        }
+
+        .event-item {
+            background: #1d304e;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            border-left: 5px solid #3b82f6;
+        }
+
+        .badge {
+            background: #1e4b9c;
+            padding: 0.2rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            color: white;
+        }
+
+        /* floating add button */
+        .floating-add {
+            position: sticky;
+            bottom: 20px;
+            left: 100%;
+            width: fit-content;
+            margin-top: 1rem;
+        }
+
+        /* responsiveness */
+        @media (max-width: 1000px) {
+            .admin-sidebar {
+                width: 90px;
+                padding: 1rem 0.5rem;
+            }
+            .sidebar-logo .logo-text, .admin-badge, .admin-info, .nav-item span {
+                display: none;
+            }
+            .nav-item {
+                justify-content: center;
+                padding: 1rem 0;
+            }
+            .nav-item i {
+                margin: 0;
+            }
+            .admin-profile {
+                justify-content: center;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="admin-header">
-        <h1>⚙️ Admin — ZenCore</h1>
-        <span style="color:#b0caf5;">atifqmi@gmail.com</span>
+    <!-- SIDEBAR - ultra pro -->
+    <div class="admin-sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-bolt logo-icon"></i>
+            <span class="logo-text">ZenCore</span>
+        </div>
+        <div class="admin-badge">
+            <i class="fas fa-shield-alt"></i> super admin
+        </div>
+
+        <div class="nav-menu">
+            <div class="nav-item active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-calendar-plus"></i>
+                <span>Events</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-tasks"></i>
+                <span>Applications</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-bell"></i>
+                <span>Notifications</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-crown"></i>
+                <span>Admins</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-link"></i>
+                <span>Button links</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="admin-profile">
+                <div class="admin-avatar">A</div>
+                <div class="admin-info">
+                    <h4>atifqmi@gmail.com</h4>
+                    <p><i class="fas fa-circle" style="color: #2ecc71; font-size: 0.5rem;"></i> online</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="grid">
-        <!-- ADD NEW ADMIN -->
-        <div class="card">
-            <h2>➕ add new admin</h2>
-            <input placeholder="email"><input placeholder="temp password">
-            <button>create admin</button>
+
+    <!-- MAIN PANEL -->
+    <div class="main-content">
+        <!-- header -->
+        <div class="content-header">
+            <div class="page-title">
+                <h1>Admin cockpit</h1>
+                <p><i class="fas fa-map-pin"></i> full control · everything editable</p>
+            </div>
+            <div class="header-actions">
+                <div class="action-btn"><i class="fas fa-sync-alt"></i> sync</div>
+                <div class="action-btn"><i class="fas fa-download"></i> export</div>
+            </div>
         </div>
-        <!-- SEND NOTIFICATION -->
-        <div class="card">
-            <h2>📢 send custom notification</h2>
-            <textarea placeholder="message for all users..." rows="2"></textarea>
-            <button>broadcast push</button>
+
+        <!-- STATS CARDS (pro) -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title"><i class="far fa-user"></i> total users</div>
+                <div class="stat-number">1,482</div>
+                <div class="stat-desc">↑ 124 this week</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title"><i class="far fa-calendar"></i> active events</div>
+                <div class="stat-number">23</div>
+                <div class="stat-desc">6 starting soon</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title"><i class="fas fa-pen"></i> applications</div>
+                <div class="stat-number">347</div>
+                <div class="stat-desc">32 pending review</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title"><i class="fas fa-bolt"></i> whatsapp link</div>
+                <div class="stat-number">892</div>
+                <div class="stat-desc">channel clicks</div>
+            </div>
         </div>
-        <!-- CREATE NEW EVENT -->
-        <div class="card">
-            <h2>📅 create event</h2>
-            <input placeholder="title"><input placeholder="description">
-            <input placeholder="photo URL"><input placeholder="winner prize">
-            <select><option>Minecraft</option><option>PUBG</option><option>Mix</option></select>
-            <input placeholder="apply button link (optional)">
-            <button>publish event</button>
+
+        <!-- TOOLS GRID (everything admin can do) -->
+        <div class="tools-grid">
+            <!-- card 1: add new admin -->
+            <div class="tool-card">
+                <div class="card-header">
+                    <i class="fas fa-user-plus"></i>
+                    <h2>Add new admin</h2>
+                </div>
+                <div class="input-group">
+                    <label>email address</label>
+                    <input type="email" placeholder="newadmin@zencore.com">
+                </div>
+                <div class="input-group">
+                    <label>temporary password</label>
+                    <input type="text" placeholder="••••••••">
+                </div>
+                <div class="input-group">
+                    <label>role</label>
+                    <select>
+                        <option>super admin</option>
+                        <option>event manager</option>
+                        <option>moderator</option>
+                    </select>
+                </div>
+                <button class="btn-primary"><i class="fas fa-shield"></i> create admin</button>
+            </div>
+
+            <!-- card 2: send custom notification -->
+            <div class="tool-card">
+                <div class="card-header">
+                    <i class="fas fa-bullhorn"></i>
+                    <h2>Broadcast notification</h2>
+                </div>
+                <div class="input-group">
+                    <label>message to all users</label>
+                    <textarea placeholder="e.g. New Minecraft event just dropped..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>optional image URL</label>
+                    <input placeholder="https://...">
+                </div>
+                <button class="btn-primary"><i class="fas fa-paper-plane"></i> send push</button>
+            </div>
+
+            <!-- card 3: create new event (full details) -->
+            <div class="tool-card">
+                <div class="card-header">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h2>Create event</h2>
+                </div>
+                <div class="input-group">
+                    <label>title</label>
+                    <input placeholder="e.g. SkyWars night">
+                </div>
+                <div class="input-group">
+                    <label>description</label>
+                    <textarea placeholder="event details..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>photo URL</label>
+                    <input placeholder="https://...">
+                </div>
+                <div class="input-group">
+                    <label>winner prize</label>
+                    <input placeholder="$100 + trophy">
+                </div>
+                <div class="input-group">
+                    <label>category</label>
+                    <select>
+                        <option>Minecraft</option>
+                        <option>PUBG Mobile</option>
+                        <option>Mix Events</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>extra field (optional)</label>
+                    <input placeholder="e.g. discord link">
+                </div>
+                <button class="btn-primary"><i class="fas fa-plus-circle"></i> publish event</button>
+            </div>
+<!-- card 4: registered users + delete/edit -->
+            <div class="tool-card">
+                <div class="card-header">
+                    <i class="fas fa-users"></i>
+                    <h2>Manage users</h2>
+                </div>
+                <div class="user-list">
+                    <div class="user-item">
+                        <div class="user-info">
+                            <span class="user-avatar-small">J</span>
+                            <span>johndoe@mc</span>
+                        </div>
+                        <div class="user-actions">
+                            <i class="fas fa-edit edit-icon"></i>
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
+                    </div>
+                    <div class="user-item">
+                        <div class="user-info">
+                            <span class="user-avatar-small">S</span>
+                            <span>sarah_pubg</span>
+                        </div>
+                        <div class="user-actions">
+                            <i class="fas fa-edit edit-icon"></i>
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
+                    </div>
+                    <div class="user-item">
+                        <div class="user-info">
+                            <span class="user-avatar-small">M</span>
+                            <span>mixer_99</span>
+                        </div>
+                        <div class="user-actions">
+                            <i class="fas fa-edit edit-icon"></i>
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
+                    </div>
+                    <div class="user-item">
+                        <div class="user-info">
+                            <span class="user-avatar-small">K</span>
+                            <span>killerb_yt</span>
+                        </div>
+                        <div class="user-actions">
+                            <i class="fas fa-edit edit-icon"></i>
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-outline" style="width:100%;"><i class="fas fa-search"></i> view all users</button>
+            </div>
+
+            <!-- card 5: all applications -->
+            <div class="tool-card">
+                <div class="card-header">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h2>Recent applications</h2>
+                </div>
+                <div class="event-item">
+                    <strong>⛏️ Minecraft</strong> – Steve (18, US) <span class="badge">pending</span>
+                </div>
+                <div class="event-item">
+                    <strong>🪖 PUBG</strong> – xX_sniper (UID: 534234) <span class="badge">approved</span>
+                </div>
+                <div class="event-item">
+                    <strong>🎮 Mix</strong> – Anna (21, DE) <span class="badge">review</span>
+                </div>
+                <div class="event-item">
+                    <strong>⛏️ Minecraft</strong> – Alex (16, CA) <span class="badge">waiting</span>
+                </div>
+                <button class="btn-outline" style="width:100%;"><i class="fas fa-eye"></i> see all applications</button>
+            </div>
+
+            <!-- card 6: change apply now button link -->
+            <div class="tool-card">
+                <div class="card-header">
+                    <i class="fas fa-link"></i>
+                    <h2>Apply button link</h2>
+                </div>
+                <div class="input-group">
+                    <label>global apply URL (overwrite)</label>
+                    <input placeholder="https://forms.gle/...">
+                </div>
+                <div class="input-group">
+                    <label>per-category override</label>
+                    <select>
+                        <option>Minecraft</option>
+                        <option>PUBG</option>
+                        <option>Mix</option>
+                    </select>
+                </div>
+                <button class="btn-primary"><i class="fas fa-save"></i> update links</button>
+                <p style="font-size:0.8rem; color:#7b99d4; margin-top:1rem;">* affects "apply now" on all event pages</p>
+            </div>
+
+            <!-- card 7: delete / edit super tools -->
+            <div class="tool-card">
+                <div class="card-header">
+                    <i class="fas fa-crown"></i>
+                    <h2>Super actions</h2>
+                </div>
+                <p style="margin-bottom:1rem;">Full database control: edit any user, event, or application.</p>
+                <button class="btn-primary" style="background:#8a3f3f; box-shadow:0 5px 0 #561f1f;"><i class="fas fa-database"></i> advanced editor</button>
+                <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+                    <button class="btn-outline"><i class="fas fa-undo-alt"></i> reset</button>
+                    <button class="btn-outline"><i class="fas fa-file-export"></i> backup</button>
+                </div>
+            </div>
+
+            <!-- card 8: WhatsApp channel stats -->
+            <div class="tool-card">
+                <div class="card-header">
+                    <i class="fab fa-whatsapp"></i>
+                    <h2>WhatsApp channel</h2>
+                </div>
+                <div class="input-group">
+                    <label>channel link</label>
+                    <input value="https://whatsapp.com/channel/0029VbCxjrq9sBI9vuFf8y0v" readonly>
+                </div>
+                <div style="display:flex; gap:1rem; justify-content:center; margin:1rem 0;">
+                    <span><i class="far fa-eye"></i> 1.2k clicks</span>
+                    <span><i class="far fa-clock"></i> 42 joins today</span>
+                </div>
+                <button class="btn-outline" style="width:100%;"><i class="fas fa-chart-bar"></i> details</button>
+            </div>
         </div>
-        <!-- REGISTERED USERS (dummy) -->
-        <div class="card">
-            <h2>👥 registered users</h2>
-            <div class="user-row"><span>alex_24</span> <span class="del">🗑️ edit</span></div>
-            <div class="user-row"><span>killerB_yt</span> <span class="del">🗑️ edit</span></div>
-            <div class="user-row"><span>noobMaster</span> <span class="del">🗑️ edit</span></div>
-            <button>view all / delete</button>
-        </div>
-        <!-- APPLICATIONS -->
-        <div class="card">
-            <h2>📋 recent applications</h2>
-            <div>Minecraft: Steve (18, US)</div>
-            <div>PUBG: xX_sniper (UID: 534234)</div>
-            <div>Mix: Anna (21, DE)</div>
-            <button>manage applications</button>
-        </div>
-        <!-- CONTROL BUTTON LINK -->
-        <div class="card">
-            <h2>🔗 change "apply now" link</h2>
-            <input placeholder="new apply button url">
-            <button>update globally</button>
-            <p style="font-size:0.8rem; margin-top:0.5rem;">*affects all event pages</p>
-        </div>
-        <!-- SUPER ACTIONS -->
-        <div class="card">
-            <h2>⚡ everything</h2>
-            <p>full access: edit users, delete, override</p>
-            <button>export data</button><button>clear cache</button>
+
+        <!-- floating quick add -->
+        <div class="floating-add">
+            <button class="action-btn" style="background:#1e3b6f; padding:1rem 2rem; border-radius:4rem;">
+                <i class="fas fa-plus"></i> quick event
+            </button>
         </div>
     </div>
-    <div style="text-align:center; padding:2rem; color:#4b638b;">full control panel — all changes are simulated (demo ui)</div>
 </body>
 </html>
