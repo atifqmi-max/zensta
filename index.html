@@ -1,0 +1,420 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenCore Events · redirect</title>
+    <script>
+        // Automatic redirect to auth.html
+        window.location.replace('auth.html');
+    </script>
+</head>
+<body style="background:#0b0f19; color:#ccc; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; font-family:system-ui;">
+    <p>Redirecting to ZenCore authentication ⚡</p>
+</body>
+</html>
+
+
+<!-- auth.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenCore · login/register</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        body { background: radial-gradient(circle at 10% 30%, #1a1f2e, #0c0f17); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+        .glass-panel { background: rgba(18, 25, 40, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(90, 140, 255, 0.2); border-radius: 2.5rem; padding: 2.5rem 2rem; width: 100%; max-width: 460px; box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(70, 130, 255, 0.1); }
+        h1 { font-size: 2.2rem; font-weight: 600; background: linear-gradient(135deg, #fff, #b0d0ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.25rem; }
+        .sub { color: #8892b0; font-size: 0.95rem; margin-bottom: 2rem; border-left: 3px solid #3b7cff; padding-left: 1rem; }
+        .tab-bar { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #1f2a41; }
+        .tab { background: none; border: none; color: #7f8aa8; font-size: 1.3rem; font-weight: 600; padding: 0.5rem 0.2rem; cursor: pointer; transition: 0.2s; border-bottom: 3px solid transparent; margin-right: 1.5rem; }
+        .tab.active { color: white; border-bottom: 3px solid #3b7cff; }
+        .form-group { margin-bottom: 1.4rem; }
+        label { display: block; color: #b9c2da; font-size: 0.9rem; margin-bottom: 0.3rem; letter-spacing: 0.3px; }
+        input { width: 100%; padding: 1rem 1.2rem; background: #0f1422; border: 1px solid #293452; border-radius: 40px; font-size: 1rem; color: white; transition: 0.2s; }
+        input:focus { border-color: #3b7cff; outline: none; box-shadow: 0 0 0 3px rgba(59, 124, 255, 0.2); }
+        .btn-primary { width: 100%; padding: 1rem; background: linear-gradient(145deg, #2b4eb0, #1f3d8a); border: none; border-radius: 40px; font-size: 1.1rem; font-weight: 600; color: white; cursor: pointer; box-shadow: 0 8px 20px #0f1b3b; transition: 0.2s; margin-top: 0.5rem; }
+        .btn-primary:hover { background: #2e51b3; transform: scale(1.02); }
+        .google-btn { width: 100%; padding: 0.9rem; background: #1e263b; border: 1px solid #384566; border-radius: 40px; display: flex; align-items: center; justify-content: center; gap: 10px; color: white; font-weight: 500; margin: 1.5rem 0 0.8rem; cursor: pointer; transition: 0.2s; }
+        .google-btn:hover { background: #2b3450; border-color: #5b7bd5; }
+        .switch-text { text-align: center; color: #6f7a9e; font-size: 0.95rem; }
+        .switch-text button { background: none; border: none; color: #85abff; font-weight: 600; cursor: pointer; font-size: 0.95rem; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="glass-panel">
+        <h1>ZenCore</h1>
+        <div class="sub">events & tournaments</div>
+
+        <div class="tab-bar">
+            <button class="tab active" id="tabLogin">Login</button>
+            <button class="tab" id="tabRegister">Register</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div id="loginForm">
+            <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="your@email.com"></div>
+            <div class="form-group"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••"></div>
+            <button class="btn-primary" id="loginBtn">Access account</button>
+        </div>
+
+        <!-- REGISTER FORM (hidden initially) -->
+        <div id="registerForm" class="hidden">
+            <div class="form-group"><label>Email</label><input type="email" id="regEmail" placeholder="hello@zen.com"></div>
+            <div class="form-group"><label>Password</label><input type="password" id="regPass" placeholder="min 6 chars"></div>
+            <div class="form-group"><label>Confirm</label><input type="password" id="regConfirm" placeholder="••••••••"></div>
+            <button class="btn-primary" id="registerBtn">Create account</button>
+        </div>
+
+        <!-- LOGIN WITH GOOGLE (both forms) -->
+        <button class="google-btn" id="googleLoginBtn"><svg width="20" viewBox="0 0 24 24"><path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Continue with Google</button>
+
+        <p class="switch-text" id="switchPanel"> </p>
+    </div>
+
+    <script>
+        (function() {
+            const tabLogin = document.getElementById('tabLogin');
+            const tabRegister = document.getElementById('tabRegister');
+            const loginDiv = document.getElementById('loginForm');
+            const registerDiv = document.getElementById('registerForm');
+            const switchPanel = document.getElementById('switchPanel');
+
+            function setActiveTab(isLogin) {
+                if (isLogin) {
+                    tabLogin.classList.add('active');
+                    tabRegister.classList.remove('active');
+                    loginDiv.classList.remove('hidden');
+                    registerDiv.classList.add('hidden');
+                    switchPanel.innerHTML = `No account? <button id="gotoRegisterBtn">Register now</button>`;
+                } else {
+                    tabRegister.classList.add('active');
+                    tabLogin.classList.remove('active');
+                    registerDiv.classList.remove('hidden');
+                    loginDiv.classList.add('hidden');
+                    switchPanel.innerHTML = `Already have an account? <button id="gotoLoginBtn">Sign in</button>`;
+                }
+                attachSwitchListeners();
+            }
+
+            function attachSwitchListeners() {
+                const gotoRegister = document.getElementById('gotoRegisterBtn');
+                const gotoLogin = document.getElementById('gotoLoginBtn');
+                if (gotoRegister) gotoRegister.addEventListener('click', () => setActiveTab(false));
+                if (gotoLogin) gotoLogin.addEventListener('click', () => setActiveTab(true));
+            }
+
+            tabLogin.addEventListener('click', () => setActiveTab(true));
+            tabRegister.addEventListener('click', () => setActiveTab(false));
+            setActiveTab(true); // default login
+
+            // fake login/register success + google => show timer + redirect to homepage
+            function handleSuccess() {
+                // store a flag that user just logged in (for demo)
+                sessionStorage.setItem('zencore_justAuth', 'true');
+                // redirect to the whatsapp notice page (timer)
+                window.location.href = 'whatsapp-notice.html'; 
+            }
+
+            // create a simple whatsapp notice page if not exist, but we need to open it.
+            // but requirements: after login show text + timer 10 sec, then homepage. We'll build a small inline page and redirect?
+            // actually better: directly show a modal-like page? but requirement says "When member login/register successfully to see this text for 10 seconds ... then open homepage.html".
+            // So we create a temporary page "whatsapp-notice.html" dynamically? we have 8 files limit, but we can simulate within auth using hidden div? but spec says open automatic auth.html then after success open a page with timer. Let's create a mini page as part of auth? simpler: override window location to a data URI? but better: we make a separate file: "whatsapp-notice.html" but that would be 9th file. I'll embed timer inside auth after login, but spec: "When Member Login/Register Sussesfuly To See This Text For 10 Seconds ... and add Whatsapp Channel link. When complete 10 seconds to open automatic homepage.html" – so after auth success we show a fullscreen overlay with timer and channel link, then redirect.
+            // I'll implement inside auth.html: after login/register/google we hide forms and show a big timer card, then redirect.
+
+            // Override: Add a hidden timer container
+            const container = document.querySelector('.glass-panel');
+            const timerDiv = document.createElement('div');
+            timerDiv.id = 'whatsappTimer';
+            timerDiv.style.display = 'none';
+            timerDiv.style.textAlign = 'center';
+            timerDiv.style.padding = '2rem 0';
+            timerDiv.innerHTML = `
+                <div style="background:#121c2f; border-radius:2rem; padding:2rem 1.5rem; border:1px solid #2b4875;">
+                    <div style="font-size:2.5rem; margin-bottom:1rem;">📢</div>
+                    <div style="color:white; font-size:1.5rem; font-weight:600; margin-bottom:1rem;">Join our WhatsApp channel</div>
+                    <div style="background:#1f2a44; padding:1rem; border-radius:60px; margin:1.5rem 0;">
+                        <a href="https://whatsapp.com/channel/0029VbCxjrq9sBI9vuFf8y0v" target="_blank" style="color:#aac8ff; text-decoration:none; font-size:1.2rem;">🔗 click to join</a>
+                    </div>
+                    <div style="color:#9eb4e6; font-size:1.1rem;">Opening home in <span id="timerSeconds">10</span>s</div>
+                    <div style="width:100%; height:6px; background:#14233c; border-radius:10px; margin-top:20px;"><div id="timerBar" style="width:100%; height:6px; background:#3b7cff; border-radius:10px;"></div></div>
+                </div>
+            `;
+            container.appendChild(timerDiv);
+
+            function showWhatsappTimer() {
+                // hide forms & tabs & google button
+                document.querySelector('.tab-bar').style.display = 'none';
+                loginDiv.style.display = 'none';
+                registerDiv.style.display = 'none';
+                document.querySelector('.google-btn').style.display = 'none';
+                switchPanel.style.display = 'none';
+                timerDiv.style.display = 'block';
+
+                let seconds = 10;
+                const span = document.getElementById('timerSeconds');
+                const bar = document.getElementById('timerBar');
+                const interval = setInterval(() => {
+                    seconds--;
+                    span.textContent = seconds;
+                    bar.style.width = (seconds * 10) + '%';
+                    if (seconds <= 0) {
+                        clearInterval(interval);
+                        window.location.href = 'homepage.html';
+                    }
+                }, 1000);
+            }
+
+            document.getElementById('loginBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                // simple validation for demo
+                const email = document.getElementById('loginEmail').value;
+                const pass = document.getElementById('loginPass').value;
+                if (email && pass) showWhatsappTimer();
+                else alert('enter credentials (any)');
+            });
+
+            document.getElementById('registerBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                const p = document.getElementById('regPass').value;
+                const c = document.getElementById('regConfirm').value;
+                if (p && p === c) showWhatsappTimer();
+                else alert('passwords match & fill all');
+            });
+
+            document.getElementById('googleLoginBtn').addEventListener('click', () => {
+                showWhatsappTimer(); // google success
+            });
+        })();
+    </script>
+</body>
+</html>
+
+
+<!-- homepage.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenCore · home</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; }
+        body { background:#0b0f19; color:#fff; min-height:100vh; display:flex; flex-direction:column; }
+        .navbar { padding:1.8rem 2rem; background:#101624; border-bottom:1px solid #1f2940; }
+        .logo { font-size:1.9rem; font-weight:700; background:linear-gradient(145deg,#fff,#aac3ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .content { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; }
+        h2 { font-size:2.3rem; margin-bottom:3rem; font-weight:500; letter-spacing:-0.5px; color:#e0ecff; }
+        .category-grid { display:flex; gap:2rem; flex-wrap:wrap; justify-content:center; }
+        .card { background:linear-gradient(145deg,#182237,#0f1a2f); width:260px; padding:2.2rem 1.5rem; border-radius:3rem; border:1px solid #2d405f; text-align:center; cursor:pointer; transition:0.2s; box-shadow:0 20px 30px -10px #00000080; }
+        .card:hover { transform:translateY(-10px); border-color:#4f7eff; background:#1e2b45; }
+        .card .emoji { font-size:4rem; margin-bottom:1rem; filter:drop-shadow(0 4px 4px #000); }
+        .card h3 { font-size:2rem; font-weight:600; margin-bottom:0.3rem; }
+        .card p { color:#9db1d5; font-size:1rem; }
+    </style>
+</head>
+<body>
+    <div class="navbar"><span class="logo">⚡ ZenCore</span></div>
+    <div class="content">
+        <h2>choose battleground</h2>
+        <div class="category-grid">
+            <div class="card" onclick="window.location='minecraft.html'">
+                <div class="emoji">⛏️</div>
+                <h3>Minecraft</h3>
+                <p>build & battle</p>
+            </div>
+            <div class="card" onclick="window.location='pubg.html'">
+                <div class="emoji">🪖</div>
+                <h3>PUBG Mobile</h3>
+                <p>tpp/fpp royale</p>
+            </div>
+            <div class="card" onclick="window.location='mix.html'">
+                <div class="emoji">🎮</div>
+                <h3>Mix Events</h3>
+                <p>variety games</p>
+            </div>
+        </div>
+        <div style="margin-top:4rem;"><a href="admin-login.html" style="color:#3f5688; text-decoration:none; font-size:0.9rem; border:1px solid #2e3c5a; padding:0.5rem 1.5rem; border-radius:40px;">admin</a></div>
+    </div>
+</body>
+</html>
+
+
+<!-- admin-login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenCore · admin login</title>
+    <style>
+        body { background:#0c0f19; display:flex; align-items:center; justify-content:center; height:100vh; font-family:'Inter',sans-serif; }
+        .admin-card { background:#131b2c; border:1px solid #2e4172; padding:3rem; border-radius:4rem; width:400px; }
+        h2 { color:white; margin-bottom:2rem; } 
+        input { width:100%; padding:1rem; background:#1f2843; border:1px solid #354b7a; border-radius:60px; margin-bottom:1.5rem; color:white; }
+        button { width:100%; padding:1rem; background:#2f4ab0; border:none; border-radius:60px; color:white; font-weight:bold; cursor:pointer; }
+        .error { color:#ff928b; margin-top:1rem; }
+    </style>
+</head>
+<body>
+    <div class="admin-card">
+        <h2>🔐 admin access</h2>
+        <input type="email" id="adminEmail" placeholder="email" value="atifqmi@gmail.com">
+        <input type="password" id="adminPass" placeholder="password">
+        <button id="adminLoginBtn">enter panel</button>
+        <div id="adminError" class="error"></div>
+    </div>
+    <script>
+        document.getElementById('adminLoginBtn').addEventListener('click', () => {
+            const email = document.getElementById('adminEmail').value.trim();
+            const pass = document.getElementById('adminPass').value.trim();
+            if (email === 'atifqmi@gmail.com' && pass === 'kistan**1') {
+                window.location.href = 'admin.html';
+            } else {
+                document.getElementById('adminError').textContent = 'invalid credentials';
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+<!-- minecraft.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>ZenCore · Minecraft</title><style>body{background:#0c1020;color:#fff;font-family:'Inter',sans-serif;padding:2rem;}.container{max-width:600px;margin:3rem auto;background:#141d31;border-radius:3rem;padding:3rem;border:1px solid #2d4270;}input{display:block;width:100%;margin:1.2rem 0;padding:1rem;background:#1b2743;border:1px solid #3e5588;border-radius:50px;color:white;}.btn{padding:1rem 2rem;background:#2c4eb0;border:none;border-radius:60px;color:white;font-weight:bold;cursor:pointer;}.note{color:#9bb2e6;margin-top:2rem;}</style></head>
+<body>
+    <div class="container">
+        <h2>⛏️ Minecraft event</h2>
+        <p style="margin-bottom:2rem;">apply with your details</p>
+        <input placeholder="your-minecraft-username">
+        <input placeholder="your-real-name">
+        <input placeholder="your-age">
+        <input placeholder="your-country">
+        <input placeholder="your-device (pc/mobile)">
+        <button class="btn" onclick="alert('Application sent (demo)')">Apply for event</button>
+        <div class="note">⏺️ you'll be notified</div>
+    </div>
+</body>
+</html>
+
+
+<!-- pubg.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>ZenCore · PUBG</title><style>body{background:#0c1020;color:#fff;font-family:'Inter',sans-serif;padding:2rem;}.container{max-width:600px;margin:3rem auto;background:#141d31;border-radius:3rem;padding:3rem;border:1px solid #2d4270;}input{display:block;width:100%;margin:1.2rem 0;padding:1rem;background:#1b2743;border:1px solid #3e5588;border-radius:50px;color:white;}.btn{padding:1rem 2rem;background:#2c4eb0;border:none;border-radius:60px;color:white;font-weight:bold;cursor:pointer;}</style></head>
+<body>
+    <div class="container">
+        <h2>🪖 PUBG Mobile</h2>
+        <input placeholder="your-pubg-username">
+        <input placeholder="your-real-name">
+        <input placeholder="your-age">
+        <input placeholder="your-country">
+        <input placeholder="your-device">
+        <input placeholder="your-pubg-uid">
+        <button class="btn" onclick="alert('registered for PUBG')">Apply for event</button>
+    </div>
+</body>
+</html>
+
+
+<!-- mix.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>ZenCore · Mix events</title><style>body{background:#0c1020;color:#fff;font-family:'Inter',sans-serif;padding:2rem;}.container{max-width:600px;margin:3rem auto;background:#141d31;border-radius:3rem;padding:3rem;border:1px solid #2d4270;}input{display:block;width:100%;margin:1.2rem 0;padding:1rem;background:#1b2743;border:1px solid #3e5588;border-radius:50px;color:white;}.btn{padding:1rem 2rem;background:#2c4eb0;border:none;border-radius:60px;color:white;font-weight:bold;cursor:pointer;}</style></head>
+<body>
+    <div class="container">
+        <h2>🎲 Mix events</h2>
+        <input placeholder="your-real-name">
+        <input placeholder="your-age">
+        <input placeholder="your-country">
+        <input placeholder="your-device">
+        <button class="btn" onclick="alert('applied for mix event')">Apply for event</button>
+    </div>
+</body>
+</html>
+
+
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenCore · admin panel</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+        body{background:#0a0e1a;display:flex;color:#edeff7;}
+        .sidebar{width:300px;background:#0f172b;height:100vh;padding:2rem 1.5rem;border-right:1px solid #253153;}
+        .main{flex:1;padding:2.5rem;}
+        .sidebar h2{color:white;margin-bottom:2.5rem;font-size:1.8rem;}
+        .sidebar button{display:block;width:100%;background:#1c2747;border:none;color:#ccd9ff;padding:1rem 1.5rem;margin:0.5rem 0;border-radius:50px;text-align:left;font-size:1rem;cursor:pointer;transition:0.1s;}
+        .sidebar button:hover{background:#2c3d6b;color:white;}
+        .card{background:#162035;border-radius:2rem;padding:2rem;border:1px solid #33487a;margin-bottom:2rem;}
+        .flex{display:flex;gap:2rem;flex-wrap:wrap;}
+        input,textarea,select{display:block;width:100%;padding:0.9rem 1.2rem;background:#1e2b49;border:1px solid #3d5693;border-radius:60px;margin-bottom:1rem;color:white;}
+        .btn{background:#2d4fc7;border:none;padding:0.8rem 2.2rem;border-radius:60px;color:white;font-weight:600;margin-right:1rem;cursor:pointer;}
+        table{width:100%;border-collapse:collapse;background:#14203b;border-radius:20px;overflow:hidden;}
+        th{background:#1e3163;padding:1rem;text-align:left;}
+        td{padding:1rem;border-bottom:1px solid #263b63;}
+        .badge{background:#2757af;padding:0.2rem 1rem;border-radius:60px;font-size:0.8rem;}
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>⚙️ CoreAdmin</h2>
+        <button>📊 dashboard</button>
+        <button>👥 all users (248)</button>
+        <button>📋 applications (42)</button>
+        <button>➕ new event</button>
+        <button>🔔 send notification</button>
+        <button>⚡ change apply links</button>
+        <button>👑 add new admin</button>
+    </div>
+    <div class="main">
+        <div style="display:flex;justify-content:space-between;"><h1 style="font-size:2.3rem;">welcome, atif</h1><span class="badge">super admin</span></div>
+        <p style="margin:1rem 0 2rem;color:#a7b9f0;">manage everything — users, events, notifications</p>
+
+        <div class="flex">
+            <div class="card" style="flex:1;">
+                <h3>➕ create new event</h3>
+                <input placeholder="title eg. Night Build battle">
+                <textarea placeholder="description" rows="2"></textarea>
+                <input placeholder="photo URL">
+                <input placeholder="winner prize">
+                <select><option>Minecraft</option><option>PUBG</option><option>Mix</option></select>
+                <button class="btn">publish event</button>
+            </div>
+            <div class="card" style="flex:1;">
+                <h3>📢 custom notification</h3>
+                <input placeholder="target: all users">
+                <textarea placeholder="message..." rows="3"></textarea>
+                <button class="btn">broadcast</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>👤 sample users (recent)</h3>
+            <table>
+                <tr><th>name</th><th>email</th><th>actions</th></tr>
+                <tr><td>Alex M.</td><td>alex@mc.com</td><td><button style="background:#2d3b70;">edit</button> <button style="background:#872e4b;">del</button></td></tr>
+                <tr><td>J. Rider</td><td>pubg@rider.com</td><td><button>edit</button> <button>del</button></td></tr>
+                <tr><td>Sam</td><td>mixer@sam.gg</td><td><button>edit</button> <button>del</button></td></tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h3>🔗 change "apply now" link (per category)</h3>
+            <input placeholder="Minecraft apply URL" value="minecraft.html">
+            <input placeholder="PUBG apply URL" value="pubg.html">
+            <input placeholder="Mix apply URL" value="mix.html">
+            <button class="btn">update links</button>
+        </div>
+        <p style="color:#5d73b0; margin-top:2rem;">*everything fully manageable (pro demo)</p>
+    </div>
+</body>
+</html>
