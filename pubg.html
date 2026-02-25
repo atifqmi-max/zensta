@@ -4,48 +4,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenCore · PUBG Mobile</title>
-    <style> /* similar style, condensed for brevity, same design language */
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
-        body { background:#0c1422; color:white; display:flex; flex-direction:column; align-items:center; }
-        .nav { width:100%; padding:1rem 2rem; background:#0e1628; border-bottom:1px solid #213457; display:flex; }
-        .back { color:#9ab9ff; text-decoration:none; font-size:1.2rem; }
-        .container { max-width:700px; margin:2rem; background:#131f33; border-radius:2.5rem; padding:2.5rem; border:1px solid #2a4070; width:100%; }
-        h1 { font-size:2.5rem; background:linear-gradient(145deg,#f9c49a,#d97c2b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .apply-btn { background:#c95f1e; color:white; border:none; padding:0.9rem 2.5rem; border-radius:3rem; font-weight:600; cursor:pointer; margin:1rem 0; box-shadow:0 5px 0 #7a3d12; }
-        .apply-form { display:none; background:#111f30; border-radius:2rem; padding:2rem; margin-top:2rem; }
-        .apply-form input { display:block; width:100%; padding:0.8rem 1.2rem; margin-bottom:1rem; background:#07111f; border:1px solid #2f4870; border-radius:3rem; color:white; }
-        .submit-app { background:#3b82f6; box-shadow:0 4px 0 #1e4b9c; border:none; padding:0.8rem; width:100%; border-radius:3rem; font-weight:bold; color:white; cursor:pointer; }
+    <title>ZenCore · PUBG Mobile events</title>
+    <style>
+        /* Same base styles as minecraft.html, with color variations */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: #0b111f; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+        .navbar { background: rgba(10, 17, 30, 0.95); backdrop-filter: blur(10px); padding: 1.2rem 2.5rem; display: flex; align-items: center; gap: 2rem; border-bottom: 1px solid #253a68; position: sticky; top: 0; }
+        .back-link { color: #8aaeff; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; font-weight: 500; transition: 0.2s; }
+        .back-link:hover { color: #b8d0ff; transform: translateX(-3px); }
+        .logo-small { font-size: 1.5rem; font-weight: 600; background: linear-gradient(135deg, #f9c49a, #d97c2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-left: auto; }
+        .container { max-width: 900px; margin: 2.5rem auto; padding: 0 2rem; width: 100%; }
+        .category-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
+        .category-icon { font-size: 3.5rem; background: #1f2f4a; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 2rem; border: 2px solid #d97c2b; }
+        .category-title h1 { font-size: 2.8rem; font-weight: 600; background: linear-gradient(145deg, #f9c49a, #d97c2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .category-title p { color: #9ab0d9; font-size: 1.1rem; }
+        .event-card { background: #14243c; border-radius: 2.5rem; padding: 2.5rem; border: 1px solid #2f4870; box-shadow: 0 20px 30px -10px #00000080; margin-bottom: 2rem; }
+        .event-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+        .event-header h2 { font-size: 2.2rem; font-weight: 600; color: #d0e2ff; }
+        .prize-badge { background: #8b5f2e; padding: 0.7rem 1.8rem; border-radius: 3rem; font-weight: 600; font-size: 1.2rem; border: 1px solid #f0a64a; color: #ffebc2; }
+        .event-desc { color: #b8cff2; margin-bottom: 2rem; line-height: 1.6; font-size: 1.1rem; }
+        .apply-btn { background: #c95f1e; color: white; border: none; padding: 1rem 2.5rem; border-radius: 3rem; font-weight: 600; font-size: 1.2rem; cursor: pointer; box-shadow: 0 6px 0 #7a3d12; transition: 0.1s; width: fit-content; }
+        .apply-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #7a3d12; }
+        .apply-form { background: #0e1d30; border-radius: 2.5rem; padding: 2.5rem; border: 1px solid #3b5f8a; margin-top: 2rem; display: none; animation: slideDown 0.3s ease; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+        .apply-form.visible { display: block; }
+        .apply-form h3 { font-size: 1.8rem; margin-bottom: 2rem; color: #d4e4ff; font-weight: 500; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 0.5rem; }
+        .form-group label { display: block; font-size: 0.9rem; color: #adc4f0; margin-bottom: 0.3rem; margin-left: 0.5rem; }
+        .form-group input { width: 100%; padding: 1rem 1.5rem; background: #112236; border: 1px solid #2d4870; border-radius: 3rem; color: white; font-size: 1rem; outline: none; transition: 0.2s; }
+        .form-group input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.2); }
+        .submit-btn { background: #3b82f6; color: white; border: none; padding: 1rem 3rem; border-radius: 3rem; font-weight: 600; font-size: 1.2rem; cursor: pointer; box-shadow: 0 5px 0 #1e4b9c; transition: 0.1s; width: 100%; }
+        .submit-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #1e4b9c; }
+        .success-note { margin-top: 1.5rem; color: #8fc5ff; text-align: center; font-style: italic; }
     </style>
 </head>
 <body>
-    <div class="nav"><a href="homepage.html" class="back">← Home</a></div>
+    <div class="navbar">
+        <a href="homepage.html" class="back-link">← Back to categories</a>
+        <div class="logo-small">🪖 ZenCore</div>
+    </div>
+
     <div class="container">
-        <h1>🪖 PUBG Mobile</h1>
-        <div style="background:#1c2b42; border-radius:2rem; padding:1.5rem;">
-            <h2>Erangel 2.0 cup</h2>
-            <p>prize: 100$ · solo</p>
-            <button class="apply-btn" id="showPubgForm">Apply for event</button>
+        <div class="category-header">
+            <div class="category-icon">🪖</div>
+            <div class="category-title">
+                <h1>PUBG Mobile</h1>
+                <p>battle royale · TDM · sanhok events</p>
+            </div>
         </div>
 
-        <div id="pubgApplyForm" class="apply-form">
-            <h3 style="margin-bottom:1rem">PUBG registration</h3>
-            <input type="text" placeholder="your-pubg-username" id="pubgUser">
-            <input type="text" placeholder="your-real-name" id="pubgReal">
-            <input type="number" placeholder="your-age" id="pubgAge">
-            <input type="text" placeholder="your-country" id="pubgCountry">
-            <input type="text" placeholder="your-device" id="pubgDevice">
-            <input type="text" placeholder="your-pubg-uid" id="pubgUid">
-            <button class="submit-app" id="pubgSubmit">submit</button>
+        <div class="event-card">
+            <div class="event-header">
+                <h2>Erangel Cup S8</h2>
+                <span class="prize-badge">🏆 $100 prize</span>
+            </div>
+            <div class="event-desc">
+                <p>🗓️ May 20, 2026 · solo mode · TPP</p>
+                <p style="margin-top: 0.8rem;">Classic Erangel. Winner takes all.</p>
+            </div>
+            <button class="apply-btn" id="showFormBtn">Apply for event</button>
+
+            <div id="applyForm" class="apply-form">
+                <h3>📋 PUBG registration</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>pubg username</label><input type="text" id="pubgUser" required></div>
+                    <div class="form-group"><label>real name</label><input type="text" id="pubgReal" required></div>
+                    <div class="form-group"><label>age</label><input type="number" id="pubgAge" required></div>
+                    <div class="form-group"><label>country</label><input type="text" id="pubgCountry" required></div>
+                    <div class="form-group"><label>device</label><input type="text" id="pubgDevice" required></div>
+                    <div class="form-group"><label>pubg UID</label><input type="text" id="pubgUid" required></div>
+                </div>
+                <button class="submit-btn" id="submitApplication">Submit application</button>
+                <div class="success-note" id="successMsg" style="display: none;">✓ Application received! (demo)</div>
+            </div>
         </div>
     </div>
+
     <script>
-        document.getElementById('showPubgForm').addEventListener('click', ()=>{
-            document.getElementById('pubgApplyForm').style.display = 'block';
-        });
-        document.getElementById('pubgSubmit').addEventListener('click', ()=>{
-            alert('pubg application saved (demo)');
-        });
+        (function() {
+            document.getElementById('showFormBtn').addEventListener('click', function() {
+                const form = document.getElementById('applyForm');
+                form.classList.add('visible');
+                form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+
+            document.getElementById('submitApplication').addEventListener('click', function(e) {
+                e.preventDefault();
+                const fields = ['pubgUser', 'pubgReal', 'pubgAge', 'pubgCountry', 'pubgDevice', 'pubgUid'];
+                for (let id of fields) {
+                    if (!document.getElementById(id).value.trim()) {
+                        alert('Please fill in all fields');
+                        return;
+                    }
+                }
+                document.getElementById('successMsg').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('successMsg').style.display = 'none';
+                }, 3000);
+            });
+        })();
     </script>
 </body>
 </html>
