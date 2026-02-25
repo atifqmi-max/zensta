@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenCore · teams & leaderboard</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #0a0f1e;
+            color: #eef4ff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(10, 17, 30, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 1.2rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #253a68;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-link {
+            color: #8aaeff;
+            text-decoration: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #1b2942;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            transition: 0.2s;
+            border: 1px solid #2f4a78;
+        }
+
+        .back-link:hover {
+            background: #253f66;
+            color: white;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a5c9ff, #7aa5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-left: 1rem;
+        }
+
+        .admin-badge {
+            background: #1f3a6b;
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            border: 1px solid #3f68b0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .admin-badge a {
+            color: #b8d4ff;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-badge:hover {
+            background: #2a4a88;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* Header */
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .page-header i {
+            font-size: 2.5rem;
+            color: #7aa5ff;
+            background: #1f3760;
+            padding: 1rem;
+            border-radius: 1.8rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(145deg, #fff, #b8d0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header p {
+            color: #7f98c7;
+            margin-top: 0.3rem;
+        }
+
+        /* Grid layout */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Cards */
+        .card {
+            background: #14243c;
+            border-radius: 2.5rem;
+            padding: 2rem;
+            border: 1px solid #2d4870;
+            box-shadow: 0 20px 30px -12px #000000b3;
+            backdrop-filter: blur(4px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.8rem;
+            border-bottom: 1px solid #253f68;
+            padding-bottom: 1rem;
+        }
+
+        .card-header i {
+            font-size: 1.8rem;
+            color: #7aa5ff;
+            background: #1f3760;
+            padding: 0.8rem;
+            border-radius: 1.5rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #e2ecff;
+        }
+
+        /* Form elements */
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #aec4f0;
+            margin-bottom: 0.3rem;
+            margin-left: 0.6rem;
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 0.9rem 1.4rem;
+            background: #0e1d33;
+            border: 1px solid #2b4a7a;
+            border-radius: 2rem;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .btn-primary {
+            background: #1f3d75;
+            border: none;
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #10223d;
+            transition: 0.1s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 0.8rem;
+        }
+
+        .btn-primary:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #10223d;
+        }
+
+        .btn-primary i {
+            font-size: 1.1rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #3b5f8a;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 3rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline:hover {
+            background: #1e3355;
+            border-color: #6a93d4;
+        }
+
+        /* Team list / invites */
+        .team-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 1rem 0;
+            padding-right: 5px;
+        }
+
+        .team-item {
+            background: #1d304e;
+            border-radius: 2rem;
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .team-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .team-avatar {
+            width: 36px;
+            height: 36px;
+            background: #3f6090;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .invite-status {
+            font-size: 0.8rem;
+            color: #8fc5ff;
+        }
+
+        .status-badge {
+            background: #2d4f2d;
+            padding: 0.2rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            color: #b8ffb8;
+        }
+
+        /* Leaderboard table */
+        .leaderboard-card {
+            grid-column: span 2;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th {
+            text-align: left;
+            padding: 1rem 0.5rem;
+            color: #aec4f0;
+            font-weight: 500;
+            border-bottom: 1px solid #2b4a7a;
+        }
+
+        .leaderboard-table td {
+            padding: 1rem 0.5rem;
+            border-bottom: 1px solid #1f3760;
+        }
+
+        .leaderboard-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rank-1 {
+            color: gold;
+            font-weight: 700;
+        }
+        .rank-2 {
+            color: silver;
+            font-weight: 600;
+        }
+        .rank-3 {
+            color: #cd7f32;
+            font-weight: 600;
+        }
+
+        .team-tag {
+            background: #1f3d75;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+        }
+
+        /* Admin login section (collapsible) */
+        .admin-section {
+            margin-top: 3rem;
+            border-top: 2px dashed #2b4a7a;
+            padding-top: 2rem;
+        }
+
+        .admin-login-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #8aaeff;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-login-panel {
+            background: #0e1d30;
+            border-radius: 2rem;
+            padding: 2rem;
+            border: 1px solid #3b5f8a;
+            max-width: 450px;
+            display: none;
+        }
+
+        .admin-login-panel.visible {
+            display: block;
+        }
+
+        .admin-login-panel h3 {
+            margin-bottom: 1.5rem;
+            color: #d4e4ff;
+        }
+
+        .error-msg {
+            color: #ff8a8a;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 800px) {
+            .navbar {
+                padding: 1rem;
+            }
+            .teams-grid {
+                grid-template-columns: 1fr;
+            }
+            .leaderboard-card {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="navbar">
+        <div class="logo-area">
+            <a href="homepage.html" class="back-link"><i class="fas fa-arrow-left"></i> home</a>
+            <span class="logo">ZenCore Teams</span>
+        </div>
+        <div class="admin-badge" id="adminBadge">
+            <a href="#adminSection" id="adminLink"><i class="fas fa-lock"></i> admin</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Page header -->
+        <div class="page-header">
+            <i class="fas fa-users"></i>
+            <div>
+                <h1>Team Hub</h1>
+                <p>create teams, invite players, climb the leaderboard</p>
+            </div>
+        </div>
+
+        <!-- Main grid: Create team + Invite + Leaderboard -->
+        <div class="teams-grid">
+            <!-- CREATE TEAM CARD -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-plus-circle"></i>
+                    <h2>Create new team</h2>
+                </div>
+                <div class="input-group">
+                    <label>team name</label>
+                    <input type="text" id="teamName" placeholder="e.g. EnderDragons">
+                </div>
+                <div class="input-group">
+                    <label>team tag (max 5 chars)</label>
+                    <input type="text" id="teamTag" placeholder="EDG" maxlength="5">
+                </div>
+                <div class="input-group">
+                    <label>game category</label>
+                    <select id="teamGame">
+                        <option>Minecraft</option>
+                        <option>PUBG Mobile</option>
+                        <option>Mix Events</option>
+                    </select>
+                </div>
+                <button class="btn-primary" id="createTeamBtn"><i class="fas fa-flag"></i> establish team</button>
+                <div style="margin-top: 1rem; font-size:0.9rem; color:#8aaee0;" id="teamCreateMsg"></div>
+            </div>
+
+            <!-- INVITE PLAYER CARD -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-envelope"></i>
+                    <h2>Invite member</h2>
+                </div>
+                <div class="input-group">
+                    <label>player email</label>
+                    <input type="email" id="inviteEmail" placeholder="teammate@example.com">
+                </div>
+                <div class="input-group">
+                    <label>select your team</label>
+                    <select id="inviteTeamSelect">
+                        <option>EnderDragons (EDG)</option>
+                        <option>No team yet</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>personal message (optional)</label>
+                    <textarea id="inviteMsg" placeholder="Join us!"></textarea>
+                </div>
+                <button class="btn-primary" id="inviteBtn"><i class="fas fa-paper-plane"></i> send invitation</button>
+                <div style="margin-top: 1rem; font-size:0.9rem; color:#8aaee0;" id="inviteMsgDiv"></div>
+
+                <!-- Pending invites (demo) -->
+                <div style="margin-top: 1.8rem;">
+                    <p style="color:#aec4f0; margin-bottom:0.5rem;"><i class="fas fa-clock"></i> pending invites</p>
+                    <div class="team-list">
+                        <div class="team-item">
+                            <div class="team-info">
+                                <span class="team-avatar">J</span>
+                                <span>james@email.com</span>
+                            </div>
+                            <span class="invite-status">waiting</span>
+                        </div>
+                        <div class="team-item">
+                            <div class="team-info">
+                                <span class="team-avatar">M</span>
+                                <span>mina@gg.com</span>
+                            </div>
+                            <span class="invite-status">accepted</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEADERBOARD CARD (spans two columns) -->
+            <div class="card leaderboard-card">
+                <div class="card-header">
+                    <i class="fas fa-trophy"></i>
+                    <h2>team leaderboard</h2>
+                </div>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>rank</th>
+                            <th>team</th>
+                            <th>tag</th>
+                            <th>wins</th>
+                            <th>points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="rank-1">🥇 1</td>
+                            <td><strong>EnderDragons</strong></td>
+                            <td><span class="team-tag">EDG</span></td>
+                            <td>47</td>
+                            <td><strong>9,420</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="rank-2">🥈 2</td>
+                            <td><strong>NoRecoil</strong></td>
+                            <td><span class="team-tag">NR</span></td>
+                            <td>38</td>
+                            <td>8,150</td>
+                        </tr>
+                        <tr>
+                            <td class="rank-3">🥉 3</td>
+                            <td><strong>BlockBusters</strong></td>
+                            <td><span class="team-tag">BB</span></td>
+                            <td>31</td>
+                            <td>6,870</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>SkyWalkers</td>
+                            <td><span class="team-tag">SKW</span></td>
+                            <td>27</td>
+                            <td>5,990</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>PUBG Elite</td>
+                            <td><span class="team-tag">PEL</span></td>
+                            <td>22</td>
+                            <td>4,820</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>MixMasters</td>
+                            <td><span class="team-tag">MIX</span></td>
+                            <td>18</td>
+                            <td>3,950</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top: 1.5rem; display: flex; justify-content: center;">
+                    <button class="btn-outline"><i class="fas fa-chart-line"></i> full standings</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN LOGIN SECTION (only for admin) -->
+        <div class="admin-section" id="adminSection">
+            <div class="admin-login-toggle" id="adminToggle">
+                <i class="fas fa-lock"></i> <span>admin access (click to expand)</span>
+            </div>
+            <div class="admin-login-panel" id="adminPanel">
+                <h3><i class="fas fa-shield-alt"></i> team admin login</h3>
+                <div class="input-group">
+                    <label>email</label>
+                    <input type="email" id="adminEmail" value="atifqmi@gmail.com">
+                </div>
+                <div class="input-group">
+                    <label>password</label>
+                    <input type="password" id="adminPass" value="kistan**1">
+                </div>
+                <button class="btn-primary" id="adminLoginBtn"><i class="fas fa-sign-in-alt"></i> authenticate</button>
+                <div class="error-msg" id="adminError"></div>
+
+                <!-- Hidden admin tools (shown after login) -->
+                <div id="adminTools" style="display: none; margin-top: 2rem; border-top: 1px solid #2b4a7a; padding-top: 1.5rem;">
+                    <p style="color:#b8d4ff; margin-bottom: 1rem;"><i class="fas fa-crown"></i> admin team controls</p>
+                    <div class="input-group">
+                        <label>edit any team (by name)</label>
+                        <input placeholder="team name">
+                    </div>
+                    <div class="input-group">
+                        <label>remove member email</label>
+                        <input placeholder="player@email.com">
+                    </div>
+                    <button class="btn-primary" style="background:#8a3f3f; box-shadow:0 5px 0 #561f1f;"><i class="fas fa-trash-alt"></i> delete team</button>
+                    <button class="btn-outline" style="margin-top: 1rem; width:100%;"><i class="fas fa-edit"></i> modify leaderboard</button>
+                    <p style="margin-top: 1rem; font-size:0.85rem;">* full team management enabled</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Create team simulation
+            document.getElementById('createTeamBtn').addEventListener('click', function() {
+                const teamName = document.getElementById('teamName').value.trim();
+                const teamTag = document.getElementById('teamTag').value.trim();
+                const game = document.getElementById('teamGame').value;
+                if (!teamName || !teamTag) {
+                    document.getElementById('teamCreateMsg').innerText = '❌ fill both fields';
+                    return;
+                }
+                document.getElementById('teamCreateMsg').innerHTML = '✅ team "' + teamName + '" created (demo)';
+                // Update invite team select (demo)
+                const select = document.getElementById('inviteTeamSelect');
+                select.innerHTML = '<option>' + teamName + ' (' + teamTag + ')</option><option>No team yet</option>';
+            });
+
+            // Invite simulation
+            document.getElementById('inviteBtn').addEventListener('click', function() {
+                const email = document.getElementById('inviteEmail').value.trim();
+                if (!email) {
+                    document.getElementById('inviteMsgDiv').innerText = '❌ enter email';
+                    return;
+                }
+                document.getElementById('inviteMsgDiv').innerHTML = '✉️ invitation sent to ' + email;
+            });
+
+            // Admin toggle show/hide
+            const adminToggle = document.getElementById('adminToggle');
+            const adminPanel = document.getElementById('adminPanel');
+            adminToggle.addEventListener('click', function() {
+                adminPanel.classList.toggle('visible');
+            });
+
+            // Admin login with fixed credentials
+            const adminLoginBtn = document.getElementById('adminLoginBtn');
+            const adminError = document.getElementById('adminError');
+            const adminTools = document.getElementById('adminTools');
+
+            adminLoginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('adminEmail').value.trim();
+                const pass = document.getElementById('adminPass').value.trim();
+
+                if (email === 'atifqmi@gmail.com' && pass === 'kistan**1') {
+                    adminError.style.color = '#8fc5ff';
+                    adminError.innerText = '✅ access granted';
+                    adminTools.style.display = 'block';
+                } else {
+                    adminError.style.color = '#ff8a8a';
+                    adminError.innerText = '❌ incorrect credentials';
+                    adminTools.style.display = 'none';
+                }
+            });
+
+            // Optional: pre-open admin panel if hash is present (for UX)
+            if (window.location.hash === '#adminSection') {
+                adminPanel.classList.add('visible');
+            }
+
+            // Smooth scroll for admin badge link
+            document.getElementById('adminLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('adminSection').scrollIntoView({ behavior: 'smooth' });
+                adminPanel.classList.add('visible');
+            });
+        })();
+    </script>
+</body>
+</html>
