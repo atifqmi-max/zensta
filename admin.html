@@ -1,0 +1,83 @@
+<!-- admin.html (power panel) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenCore · admin cockpit</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+        body { background:#0a1020; color:#eef4ff; }
+        .admin-header { background:#0f1a2f; padding:1.5rem 2.5rem; border-bottom:2px solid #2c4d8c; display:flex; align-items:center; justify-content:space-between; }
+        h1 { font-size:2rem; font-weight:500; background:linear-gradient(145deg,#d4e4ff,#6ea4ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:2rem; padding:2.5rem; }
+        .card { background:#142237; border-radius:2rem; padding:1.8rem; border:1px solid #2a4170; box-shadow:0 10px 18px #00000050; }
+        .card h2 { font-weight:400; margin-bottom:1.2rem; border-left:6px solid #3b82f6; padding-left:1rem; }
+        button, .btn-like { background:#253b60; border:none; color:white; padding:0.7rem 1.4rem; border-radius:2.5rem; font-weight:500; margin:0.5rem 0.3rem; cursor:pointer; transition:0.1s; border:1px solid #3e6191; }
+        input, textarea, select { background:#0e1b2e; border:1px solid #2b4270; border-radius:3rem; padding:0.7rem 1.2rem; color:white; width:100%; margin-bottom:0.8rem; }
+        .flex { display:flex; gap:1rem; flex-wrap:wrap; }
+        .user-row { background:#1e3150; border-radius:2rem; padding:0.5rem 1.2rem; margin:0.3rem 0; display:flex; justify-content:space-between; }
+        .del { color:#ff9494; cursor:pointer; }
+        .section { margin-top:1.2rem; border-top:1px dashed #3e5680; padding-top:1rem; }
+    </style>
+</head>
+<body>
+    <div class="admin-header">
+        <h1>⚙️ Admin — ZenCore</h1>
+        <span style="color:#b0caf5;">atifqmi@gmail.com</span>
+    </div>
+    <div class="grid">
+        <!-- ADD NEW ADMIN -->
+        <div class="card">
+            <h2>➕ add new admin</h2>
+            <input placeholder="email"><input placeholder="temp password">
+            <button>create admin</button>
+        </div>
+        <!-- SEND NOTIFICATION -->
+        <div class="card">
+            <h2>📢 send custom notification</h2>
+            <textarea placeholder="message for all users..." rows="2"></textarea>
+            <button>broadcast push</button>
+        </div>
+        <!-- CREATE NEW EVENT -->
+        <div class="card">
+            <h2>📅 create event</h2>
+            <input placeholder="title"><input placeholder="description">
+            <input placeholder="photo URL"><input placeholder="winner prize">
+            <select><option>Minecraft</option><option>PUBG</option><option>Mix</option></select>
+            <input placeholder="apply button link (optional)">
+            <button>publish event</button>
+        </div>
+        <!-- REGISTERED USERS (dummy) -->
+        <div class="card">
+            <h2>👥 registered users</h2>
+            <div class="user-row"><span>alex_24</span> <span class="del">🗑️ edit</span></div>
+            <div class="user-row"><span>killerB_yt</span> <span class="del">🗑️ edit</span></div>
+            <div class="user-row"><span>noobMaster</span> <span class="del">🗑️ edit</span></div>
+            <button>view all / delete</button>
+        </div>
+        <!-- APPLICATIONS -->
+        <div class="card">
+            <h2>📋 recent applications</h2>
+            <div>Minecraft: Steve (18, US)</div>
+            <div>PUBG: xX_sniper (UID: 534234)</div>
+            <div>Mix: Anna (21, DE)</div>
+            <button>manage applications</button>
+        </div>
+        <!-- CONTROL BUTTON LINK -->
+        <div class="card">
+            <h2>🔗 change "apply now" link</h2>
+            <input placeholder="new apply button url">
+            <button>update globally</button>
+            <p style="font-size:0.8rem; margin-top:0.5rem;">*affects all event pages</p>
+        </div>
+        <!-- SUPER ACTIONS -->
+        <div class="card">
+            <h2>⚡ everything</h2>
+            <p>full access: edit users, delete, override</p>
+            <button>export data</button><button>clear cache</button>
+        </div>
+    </div>
+    <div style="text-align:center; padding:2rem; color:#4b638b;">full control panel — all changes are simulated (demo ui)</div>
+</body>
+</html>
