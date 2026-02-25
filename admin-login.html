@@ -1,0 +1,55 @@
+<!-- admin-login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenCore · admin gateway</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+        body { background:#0b0f1a; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+        .admin-box { background:#141e30; padding:3rem 2.5rem; border-radius:3rem; width:450px; border:1px solid #2d4a7a; box-shadow:0 30px 40px -15px #000; }
+        h2 { color:white; font-weight:500; margin-bottom:0.25rem; }
+        .lock-icon { font-size:2.5rem; margin-bottom:0.5rem; }
+        .input-group { margin:2rem 0 1.5rem; }
+        input { width:100%; padding:1rem 1.5rem; background:#0b1422; border:1px solid #253c60; border-radius:3rem; color:white; font-size:1rem; margin-bottom:1rem; }
+        .btn { background:#1f3a68; color:white; border:none; padding:1rem; width:100%; border-radius:3rem; font-weight:600; font-size:1.1rem; cursor:pointer; box-shadow:0 5px 0 #0f1d31; transition:0.1s; }
+        .btn:active { transform:translateY(3px); box-shadow:0 2px 0 #0f1d31; }
+        .error { color:#ff9b9b; font-size:0.9rem; margin-top:0.8rem; text-align:center; }
+    </style>
+</head>
+<body>
+    <div class="admin-box">
+        <div class="lock-icon">🔐</div>
+        <h2>admin access only</h2>
+        <p style="color:#819dbb; margin-bottom:1.5rem;">enter credentials (strict)</p>
+        <div class="input-group">
+            <input type="email" id="adminEmail" placeholder="email" value="atifqmi@gmail.com">
+            <input type="password" id="adminPass" placeholder="password" value="kistan**1">
+        </div>
+        <button class="btn" id="adminLoginBtn">authenticate</button>
+        <div id="adminError" class="error"></div>
+    </div>
+    <script>
+        const btn = document.getElementById('adminLoginBtn');
+        const emailInp = document.getElementById('adminEmail');
+        const passInp = document.getElementById('adminPass');
+        const errorDiv = document.getElementById('adminError');
+
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = emailInp.value.trim();
+            const pass = passInp.value.trim();
+
+            if (email === 'atifqmi@gmail.com' && pass === 'kistan**1') {
+                window.location.href = 'admin.html';
+            } else {
+                errorDiv.innerText = '✗ incorrect email or password';
+            }
+        });
+
+        // optional: press enter
+        passInp.addEventListener('keypress', (e) => { if(e.key === 'Enter') btn.click(); });
+    </script>
+</body>
+</html>
